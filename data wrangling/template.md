@@ -230,3 +230,11 @@ pulse_df
     ##  9 10091  76.0 male             0            3            4            0
     ## 10 10092  74.2 female          10            2           11            6
     ## # … with 1,077 more rows
+
+## Exporting data
+
+export the mlb sub-table.
+
+``` r
+write_csv(mlb_df, "./data/mlb_subtable.csv")
+```

@@ -62,3 +62,21 @@ pulse_df = read_sas("./data/public_pulse_data.sas7bdat")
 pulse_df
 ```
 
+## Exporting data
+
+export the mlb sub-table.
+
+```{r}
+write_csv(mlb_df, "./data/mlb_subtable.csv")
+```
+
+
+
+
+
+
+
+
+
+
+
