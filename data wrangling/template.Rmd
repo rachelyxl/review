@@ -8,3 +8,15 @@ library(tidyverse)
 ```
 
 ## Read in soem data 
+
+read in the litters dataset. 
+
+```{r}
+litters_df = read_csv("./data/FAS_litters.csv")
+litters_df = janitor::clean_names(litters_df)
+```
+
+## take a look at the data
+
+
+
