@@ -1,0 +1,14 @@
+---
+title: "data_manipulation"
+output: github_document
+---
+```{r}
+library(tidyverse)
+```
+
+## Load in the FAS litter data
+```{r}
+litters_df = read.csv("./data/FAS_litters.csv")
+litters_df = janitor::clean_names(litters_df)
+```
+
