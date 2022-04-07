@@ -15,3 +15,57 @@ library(tidyverse)
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## x dplyr::filter() masks stats::filter()
     ## x dplyr::lag()    masks stats::lag()
+
+## pivot\_longer
+
+load the PULSE data
+
+``` r
+pulse_data = 
+  haven::read_sas("./data/public_pulse_data.sas7bdat") %>% 
+  janitor::clean_names()
+```
+
+wide format to long format..
+
+``` r
+pulse_data_tidy = 
+  pulse_data %>% 
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visits",
+    names_prefix = "bd_score_",
+    values_to = "bdi")
+```
+
+Rewrite, combine, and extend (to add a mutate)
+
+``` r
+pulse_data = 
+  haven::read_sas("./data/public_pulse_data.sas7bdat") %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visits",
+    names_prefix = "bdi_score_",
+    values_to = "bdi") %>% 
+  relocate(id, visits) %>% 
+  mutate(visits = recode(visits, "bl" = "00m"))
+
+pulse_data
+```
+
+    ## # A tibble: 4,348 × 5
+    ##       id visits   age sex     bdi
+    ##    <dbl> <chr>  <dbl> <chr> <dbl>
+    ##  1 10003 00m     48.0 male      7
+    ##  2 10003 01m     48.0 male      1
+    ##  3 10003 06m     48.0 male      2
+    ##  4 10003 12m     48.0 male      0
+    ##  5 10015 00m     72.5 male      6
+    ##  6 10015 01m     72.5 male     NA
+    ##  7 10015 06m     72.5 male     NA
+    ##  8 10015 12m     72.5 male     NA
+    ##  9 10022 00m     58.5 male     14
+    ## 10 10022 01m     58.5 male      3
+    ## # … with 4,338 more rows
