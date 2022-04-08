@@ -1,0 +1,136 @@
+---
+title: "visualization"
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+library(ggridges)
+```
+
+```{r}
+weather_df = 
+  rnoaa::meteo_pull_monitors(
+    c("USW00094728", "USC00519397", "USS0023B17S"),
+    var = c("PRCP", "TMIN", "TMAX"), 
+    date_min = "2017-01-01",
+    date_max = "2017-12-31") %>%
+  mutate(
+    name = recode(
+      id, 
+      USW00094728 = "CentralPark_NY", 
+      USC00519397 = "Waikiki_HA",
+      USS0023B17S = "Waterhole_WA"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %>%
+  select(name, id, everything())
+
+weather_df
+```
+## Scatterplots
+
+```{r}
+ggplot(weather_df, aes(x = tmin, y = tmax)) +
+  geom_point()
+```
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + geom_point()
+```
+save and edit a plot object
+```{r}
+weather_plot = 
+  weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax))
+
+weather_plot + geom_point()
+```
+
+advanced scatterplot...
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + geom_point() + geom_smooth(se = FALSE)
+```
+Facet some things
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + geom_point(alpha = .2) + geom_smooth(se = FALSE, size = 2) + 
+  facet_grid(. ~name)
+```
+
+
+combine some elements and try a new plot
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point(aes(size = prcp), alpha = .2) +
+  geom_smooth(se = FALSE)+
+  facet_grid(.~name)
+```
+
+how many geoms have to exist ?
+you can have whatever geoms you want. 
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_smooth(se = FALSE)
+```
+you can use a neat geom!
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_density2d() + 
+  geom_point(alpha = .3)
+```
+
+##Univariate plots
+
+histograms are really great 
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin)) +
+  geom_histogram()
+```
+
+can we add color...
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_histogram()+
+  facet_grid(.~name)
+```
+
+let's try a new geometry
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name))+
+  geom_density(alpha = .3, adjust = .5)
+```
+
+## box plot
+```{r}
+weather_df %>% 
+  ggplot(aes(x = name, y = tmin)) + 
+  geom_boxplot()
+```
+
+Trendy plot
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = name, y = tmin, fill = name))+ 
+  geom_violin(alpha = .5)+
+  stat_summary()
+```
+
+ridge plots 
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = name))+
+  geom_density_ridges()
+```
+
