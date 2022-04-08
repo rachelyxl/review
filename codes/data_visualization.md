@@ -414,3 +414,45 @@ weather_df %>%
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
 ![](data_visualization_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+\#\#Themes
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5)+
+  labs(
+    title = "temperature plot",
+    x = "min (c)",
+    y = "max (c)",
+    caption = "data from rnoaa"
+  ) + 
+  viridis::scale_color_viridis(name = "Locations",
+                               discrete = TRUE
+  )+
+  theme(legend.position = "bottom")
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](data_visualization_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+overall theme
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5)+
+  labs(
+    title = "temperature plot",
+    x = "min (c)",
+    y = "max (c)",
+    caption = "data from rnoaa"
+  ) + 
+  viridis::scale_color_viridis(name = "Locations",
+                               discrete = TRUE
+  )+
+  ggthemes::theme_economist()
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](data_visualization_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->

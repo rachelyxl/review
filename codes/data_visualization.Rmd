@@ -231,4 +231,36 @@ weather_df %>%
                                discrete = TRUE
   )
 ```
+##Themes
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5)+
+  labs(
+    title = "temperature plot",
+    x = "min (c)",
+    y = "max (c)",
+    caption = "data from rnoaa"
+  ) + 
+  viridis::scale_color_viridis(name = "Locations",
+                               discrete = TRUE
+  )+
+  theme(legend.position = "bottom")
+```
+overall theme
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5)+
+  labs(
+    title = "temperature plot",
+    x = "min (c)",
+    y = "max (c)",
+    caption = "data from rnoaa"
+  ) + 
+  viridis::scale_color_viridis(name = "Locations",
+                               discrete = TRUE
+  )+
+  ggthemes::theme_economist()
+```
 
