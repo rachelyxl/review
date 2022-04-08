@@ -297,3 +297,120 @@ weather_plot
 ```
 
 ![](data_visualization_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+``` r
+weather_df = 
+  rnoaa::meteo_pull_monitors(
+    c("USW00094728", "USC00519397", "USS0023B17S"),
+    var = c("PRCP", "TMIN", "TMAX"), 
+    date_min = "2017-01-01",
+    date_max = "2017-12-31") %>%
+  mutate(
+    name = recode(
+      id, 
+      USW00094728 = "CentralPark_NY", 
+      USC00519397 = "Waikiki_HA",
+      USS0023B17S = "Waterhole_WA"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %>%
+  select(name, id, everything())
+```
+
+    ## using cached file: ~/Library/Caches/R/noaa_ghcnd/USW00094728.dly
+
+    ## date created (size, mb): 2021-10-10 20:33:29 (7.604)
+
+    ## file min/max dates: 1869-01-01 / 2021-10-31
+
+    ## using cached file: ~/Library/Caches/R/noaa_ghcnd/USC00519397.dly
+
+    ## date created (size, mb): 2021-10-10 20:33:35 (1.697)
+
+    ## file min/max dates: 1965-01-01 / 2020-02-29
+
+    ## using cached file: ~/Library/Caches/R/noaa_ghcnd/USS0023B17S.dly
+
+    ## date created (size, mb): 2021-10-10 20:33:37 (0.913)
+
+    ## file min/max dates: 1999-09-01 / 2021-10-31
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5)+
+  labs(
+    title = "temperature plot",
+    x = "min (c)",
+    y = "max (c)",
+    caption = "data from rnoaa"
+  )
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](data_visualization_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+\#\# Scales
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5)+
+  labs(
+    title = "temperature plot",
+    x = "min (c)",
+    y = "max (c)",
+    caption = "data from rnoaa"
+  ) +  
+  scale_x_continuous(
+    breaks = c(-15, 0, 15), 
+    labels = c("-15 C", "0", "15")
+  ) + 
+  scale_y_continuous(
+    position = "right"
+  )
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](data_visualization_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5)+
+  labs(
+    title = "temperature plot",
+    x = "min (c)",
+    y = "max (c)",
+    caption = "data from rnoaa"
+  ) + 
+  scale_color_hue(
+    name = "location",
+    h = c(100, 300)
+  )
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](data_visualization_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+
+same…
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5)+
+  labs(
+    title = "temperature plot",
+    x = "min (c)",
+    y = "max (c)",
+    caption = "data from rnoaa"
+  ) + 
+  viridis::scale_color_viridis(name = "Locations",
+                               discrete = TRUE
+  )
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](data_visualization_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->

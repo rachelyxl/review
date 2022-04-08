@@ -150,4 +150,85 @@ embedding:
 weather_plot
 
 ```
+```{r}
+weather_df = 
+  rnoaa::meteo_pull_monitors(
+    c("USW00094728", "USC00519397", "USS0023B17S"),
+    var = c("PRCP", "TMIN", "TMAX"), 
+    date_min = "2017-01-01",
+    date_max = "2017-12-31") %>%
+  mutate(
+    name = recode(
+      id, 
+      USW00094728 = "CentralPark_NY", 
+      USC00519397 = "Waikiki_HA",
+      USS0023B17S = "Waterhole_WA"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %>%
+  select(name, id, everything())
+```
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5)+
+  labs(
+    title = "temperature plot",
+    x = "min (c)",
+    y = "max (c)",
+    caption = "data from rnoaa"
+  )
+
+```
+## Scales
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5)+
+  labs(
+    title = "temperature plot",
+    x = "min (c)",
+    y = "max (c)",
+    caption = "data from rnoaa"
+  ) +  
+  scale_x_continuous(
+    breaks = c(-15, 0, 15), 
+    labels = c("-15 C", "0", "15")
+  ) + 
+  scale_y_continuous(
+    position = "right"
+  )
+```
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5)+
+  labs(
+    title = "temperature plot",
+    x = "min (c)",
+    y = "max (c)",
+    caption = "data from rnoaa"
+  ) + 
+  scale_color_hue(
+    name = "location",
+    h = c(100, 300)
+  )
+```
+
+same...
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5)+
+  labs(
+    title = "temperature plot",
+    x = "min (c)",
+    y = "max (c)",
+    caption = "data from rnoaa"
+  ) + 
+  viridis::scale_color_viridis(name = "Locations",
+                               discrete = TRUE
+  )
+```
 
